@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getTest } from './api/testApi';
+import './test.css';
 
 function App() {
   const [message, setMessage] = useState('');
