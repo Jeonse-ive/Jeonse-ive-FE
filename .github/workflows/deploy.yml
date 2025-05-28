@@ -20,6 +20,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      - name: DEBUG - Check host
+        run: echo "Connecting to ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}"
+
       - name: Connect to EC2 and deploy
         run: |
           ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
