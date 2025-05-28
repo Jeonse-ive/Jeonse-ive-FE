@@ -6,7 +6,6 @@ cd /home/ubuntu/Jeonse-ive-FE || exit 1
 npm install
 npm run build
 
-echo " dist 복사 중..."
 sudo rm -rf /home/ubuntu/dist
 sudo cp -r dist /home/ubuntu/
 sudo chown -R www-data:www-data /home/ubuntu/dist
