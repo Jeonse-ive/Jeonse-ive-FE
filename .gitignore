@@ -1,24 +1,39 @@
-# Logs
-logs
+### Git ###
+*.orig
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+### React ###
+.DS_*
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+logs
+**/*.backup.*
+**/*.back.*
 node_modules
-dist
-dist-ssr
-*.local
+bower_components
+*.sublime*
+psd
+thumb
+sketch
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+### Vite ###
+.vite
+dist/
+
+### Env Files ###
+.env
+.env.*
+
+### Editor ###
+.vscode/
+!.vscode/settings.json
+
+### OS ###
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
