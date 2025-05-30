@@ -2,6 +2,9 @@
   padding: 2.5vh 2rem;
   text-align: center;
   height: 95vh;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .main-header {
@@ -24,13 +27,17 @@
 }
 
 .main-content {
-  margin-top: 2rem;
+  flex: 1;                     /* 남은 공간 모두 차지 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .button-group {
   display: flex;
   justify-content: center;
   gap: 2rem;
+  height: 3.5rem;
 }
 
 .map-button {
@@ -41,4 +48,6 @@
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+
+  width: 10rem;;
 }
