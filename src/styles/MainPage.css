@@ -1,0 +1,44 @@
+.main-container {
+  padding: 2.5vh 2rem;
+  text-align: center;
+  height: 95vh;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #8c92d3;
+}
+
+.mypage-link {
+  font-size: 0.85rem;
+  color: #8c92d3;
+  text-decoration: none;
+}
+
+.main-content {
+  margin-top: 2rem;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.map-button {
+  padding: 0.6rem 1.2rem;
+  background-color: #8c92d3;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
