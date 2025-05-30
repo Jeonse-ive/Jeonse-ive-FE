@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
-// import LoginModal from '../auth/LoginModal'; // 추후에 추가
+import React, { useState } from 'react';
+
+import LoginModal from '../auth/LoginModal';
+import MapView from '../../components/MapView';
+import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
+
 import '../../styles/MainPage.css';
 
 const MainPage = () => {
-  // 나중에 context나 localStorage로 대체할 예정
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // false로 바꾸면 로그인 안된 상태
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [mapType, setMapType] = useState(null);       // 'noise' | 'fraud'
+  const [showMap, setShowMap] = useState(false);       // 버튼 위치 기준 상태
+  const loaded = useGoogleMapsLoader();
+
+  const handleClick = (type) => {
+    setMapType(type);
+    setShowMap(true); // 버튼 누른 이후 위로 이동하게 설정
+  };
 
   return (
     <div className="main-container">
@@ -13,18 +25,20 @@ const MainPage = () => {
         <a className="mypage-link" href="/mypage">마이페이지</a>
       </header>
 
-      <main className="main-content">
+      <main className="main-content" style={{ justifyContent: showMap ? 'flex-start' : 'center' }}>
         {isLoggedIn ? (
-          <div className="button-group">
-            <button className="map-button">소음지도 보기</button>
-            <button className="map-button">전세사기 지도 보기</button>
+          <div className="content-wrapper">
+            <div className={`button-group ${showMap ? 'map-shown' : ''}`}>
+            <button className="map-button" onClick={() => handleClick('noise')}>소음지도 보기</button>
+            <button className="map-button" onClick={() => handleClick('fraud')}>전세사기 지도 보기</button>
+            </div>
+
+            <div className={`map-wrapper ${showMap ? 'visible' : ''}`}>
+              {loaded && <MapView />}
+            </div>
           </div>
         ) : (
-          <div>
-            {/* 로그인 모달 자리 */}
-            <p>로그인이 필요합니다.</p>
-            {/* <LoginModal /> */}
-          </div>
+          showLogin && <LoginModal onClose={() => setShowLogin(false)} />
         )}
       </main>
     </div>

@@ -2,6 +2,8 @@
   padding: 2.5vh 2rem;
   text-align: center;
   height: 95vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-header {
@@ -24,15 +26,36 @@
 }
 
 .main-content {
-  margin-top: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1024px;
+  height: 70vh;
+}
+
+/* 버튼 그룹 */
 .button-group {
   display: flex;
   justify-content: center;
   gap: 2rem;
+
+  margin-top: 25vh; /* 초기엔 아래쪽에 위치 */
 }
 
+.button-group.map-shown {
+  margin-top: 0; /* 지도 뜨면 위로 이동 */
+}
+
+/* 버튼 스타일 */
 .map-button {
   padding: 0.6rem 1.2rem;
   background-color: #8c92d3;
@@ -41,4 +64,21 @@
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+  width: 10rem;
+  height: 3.5rem;
+}
+
+/* 지도 영역 */
+.map-wrapper {
+  width: 95vw;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  margin-top: 2rem;
+}
+
+.map-wrapper.visible {
+  opacity: 1;
 }
