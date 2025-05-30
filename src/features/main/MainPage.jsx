@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
-// import LoginModal from '../auth/LoginModal'; // 추후에 추가
+import React, { useState } from 'react';
+
+import LoginModal from '../auth/LoginModal';
+
 import '../../styles/MainPage.css';
 
+
 const MainPage = () => {
-  // 나중에 context나 localStorage로 대체할 예정
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // false로 바꾸면 로그인 안된 상태
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
 
   return (
     <div className="main-container">
@@ -20,11 +23,9 @@ const MainPage = () => {
             <button className="map-button">전세사기 지도 보기</button>
           </div>
         ) : (
-          <div>
-            {/* 로그인 모달 자리 */}
-            <p>로그인이 필요합니다.</p>
-            {/* <LoginModal /> */}
-          </div>
+          <>
+            {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+          </>
         )}
       </main>
     </div>
