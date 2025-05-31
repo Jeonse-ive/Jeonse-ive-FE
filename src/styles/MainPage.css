@@ -70,6 +70,7 @@
 
 /* 지도 영역 */
 .map-wrapper {
+  position: relative; /* 셀렉터의 absolute 기준점 */
   width: 95vw;
   height: 600px;
   display: flex;
@@ -81,4 +82,17 @@
 
 .map-wrapper.visible {
   opacity: 1;
+}
+
+.city-selector {
+  position: absolute;
+  top: -12px;
+  left: 5%;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

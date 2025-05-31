@@ -4,6 +4,7 @@ import LoginModal from '../auth/LoginModal';
 import MapView from '../../components/MapView';
 import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
 import Header from '../../components/Header';
+import axios from '../../api/axiosInstance';
 
 import '../../styles/MainPage.css';
 
@@ -15,11 +16,28 @@ const MainPage = () => {
   const [mapType, setMapType] = useState(null);       // 'noise' | 'fraud'
   const [showMap, setShowMap] = useState(false);       // 버튼 위치 기준 상태
   const loaded = useGoogleMapsLoader();
+  const [selectedCity, setSelectedCity] = useState('전체');
+  const [cityList, setCityList] = useState([]);
 
   const handleClick = (type) => {
     setMapType(type);
     setShowMap(true); // 버튼 누른 이후 위로 이동하게 설정
   };
+
+    useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const res = await axios.get('/api/stations');
+        const stations = res.data.data;
+        const cities = [...new Set(stations.map(s => s.shortAddress.split(' ')[0]))];
+        setCityList(['전체', ...cities]);
+      } catch (err) {
+        console.error('도시 목록 불러오기 실패:', err);
+      }
+    };
+
+    fetchCities();
+  }, []);
 
     useEffect(() => {
     if (!isLoggedIn) {
@@ -41,7 +59,19 @@ const MainPage = () => {
             </div>
 
             <div className={`map-wrapper ${showMap ? 'visible' : ''}`}>
-              {loaded && <MapView />}
+              {mapType === 'noise' && (
+                <select
+                  className="city-selector"
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                >
+                  {cityList.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              )}
+
+              {loaded && <MapView city={selectedCity} mapType={mapType} />}
             </div>
           </div>
         ) : (
