@@ -5,7 +5,7 @@ import '../styles/map/MapView.css';
 const MapView = ({ city, mapType }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState([]); // 기존 마커 추적
 
   useEffect(() => {
     if (!window.google || !window.google.maps) return;
@@ -20,64 +20,74 @@ const MapView = ({ city, mapType }) => {
   }, []);
 
   useEffect(() => {
-    if (!map || !window.google.maps.marker) return;
+    if (!map || !window.google.maps.marker || !mapType) return;
 
     const { AdvancedMarkerElement } = window.google.maps.marker;
 
-    const fetchStations = async () => {
-      try {
-        const res = await axios.get('/api/stations');
-        const stations = res.data.data;
+    const clearMarkers = () => {
+      markers.forEach((m) => m.setMap(null));
+      setMarkers([]);
+    };
 
-        const filtered = city === '전체'
-          ? stations
-          : stations.filter(s => s.shortAddress.startsWith(city));
+    const fetchAndRender = async () => {
+      clearMarkers(); // 기존 마커 제거
 
-        // 기존 마커 제거
-        markers.forEach(marker => marker.map = null);
+      if (mapType === 'noise') {
+        try {
+          const res = await axios.get('/api/stations');
+          const stations = res.data.data;
 
-        const createdMarkers = [];
+          const filteredStations = city === '전체'
+            ? stations
+            : stations.filter(s => s.shortAddress.startsWith(city));
 
-        filtered.forEach(({ latitude, longitude, stationName, recentValue, recordedAt }) => {
-          let color;
-          if (recentValue <= 60) color = '#4CAF50';
-          else if (recentValue <= 75) color = '#FF9800';
-          else color = '#F44336';
+          const newMarkers = [];
 
-          const markerDiv = document.createElement('div');
-          markerDiv.className = 'custom-marker';
-          markerDiv.style.backgroundColor = color;
-          markerDiv.innerText = `${recentValue} dB`;
+          filteredStations.forEach(({ latitude, longitude, stationName, recentValue, recordedAt }) => {
+            let color;
+            if (recentValue <= 60) color = '#4CAF50';
+            else if (recentValue <= 75) color = '#FF9800';
+            else color = '#F44336';
 
-          const marker = new AdvancedMarkerElement({
-            map,
-            position: { lat: latitude, lng: longitude },
-            title: stationName,
-            content: markerDiv,
+            const markerDiv = document.createElement('div');
+            markerDiv.className = 'custom-marker';
+            markerDiv.style.backgroundColor = color;
+            markerDiv.innerText = `${recentValue} dB`;
+
+            const marker = new AdvancedMarkerElement({
+              map,
+              position: { lat: latitude, lng: longitude },
+              title: stationName,
+              content: markerDiv,
+            });
+
+            const infoWindow = new window.google.maps.InfoWindow();
+            marker.addEventListener('gmp-click', () => {
+              const content = `
+                <strong>${stationName}</strong><br/>
+                소음: ${recentValue} dB<br/>
+                시간: ${new Date(recordedAt).toLocaleString()}
+              `;
+              infoWindow.setContent(content);
+              infoWindow.open({ map, anchor: marker });
+            });
+
+            newMarkers.push(marker); // 마커 배열에 추가
           });
 
-          const infoWindow = new window.google.maps.InfoWindow();
-          marker.addEventListener('gmp-click', () => {
-            const content = `
-              <strong>${stationName}</strong><br/>
-              소음: ${recentValue} dB<br/>
-              시간: ${new Date(recordedAt).toLocaleString()}
-            `;
-            infoWindow.setContent(content);
-            infoWindow.open({ map, anchor: marker });
-          });
+          setMarkers(newMarkers); // 상태 업데이트
 
-          createdMarkers.push(marker);
-        });
-
-        setMarkers(createdMarkers);
-      } catch (err) {
-        console.error('측정소 데이터 요청 실패:', err);
+        } catch (err) {
+          console.error('소음 데이터 요청 실패:', err);
+        }
+      } else if (mapType === 'fraud') {
+        clearMarkers(); // fraud일 경우도 마커 제거
+        console.log('전세사기 지도 로딩 준비 중...');
       }
     };
 
-    fetchStations();
-  }, [map, city]);
+    fetchAndRender();
+  }, [map, city, mapType]);
 
   return (
     <div
