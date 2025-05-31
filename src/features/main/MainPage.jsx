@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import LoginModal from '../auth/LoginModal';
 import MapView from '../../components/MapView';
 import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
+import Header from '../../components/Header';
 
 import '../../styles/MainPage.css';
 
@@ -28,10 +29,8 @@ const MainPage = () => {
 
   return (
     <div className="main-container">
-      <header className="main-header">
-        <h1 className="logo">Jeonse-ive</h1>
-        <a className="mypage-link" href="/mypage">마이페이지</a>
-      </header>
+    <Header />
+
 
       <main className="main-content" style={{ justifyContent: showMap ? 'flex-start' : 'center' }}>
         {isLoggedIn ? (
