@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import LoginModal from '../auth/LoginModal';
 import MapView from '../../components/MapView';
@@ -6,8 +6,10 @@ import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
 
 import '../../styles/MainPage.css';
 
+const LOGIN_STATE = false;
+
 const MainPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn] = useState(LOGIN_STATE);
   const [showLogin, setShowLogin] = useState(false);
   const [mapType, setMapType] = useState(null);       // 'noise' | 'fraud'
   const [showMap, setShowMap] = useState(false);       // 버튼 위치 기준 상태
@@ -17,6 +19,12 @@ const MainPage = () => {
     setMapType(type);
     setShowMap(true); // 버튼 누른 이후 위로 이동하게 설정
   };
+
+    useEffect(() => {
+    if (!isLoggedIn) {
+      setShowLogin(true); // 로그인 안된 상태면 모달 자동 표시
+    }
+  }, [isLoggedIn]);
 
   return (
     <div className="main-container">

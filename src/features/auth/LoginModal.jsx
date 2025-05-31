@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import '../../styles/login/LoginModal.css'
 
 const LoginModal = ({ onClose }) => {
@@ -20,9 +22,9 @@ const LoginModal = ({ onClose }) => {
           <input type="password" className="modal-input" required />
 
           <div className="modal-subtext">
-            아이디가 없으신가요? <a href="#">회원가입하기</a>
+            아이디가 없으신가요? <Link to="/signup">회원가입하기</Link>
           </div>
-
+          
           <button type="submit" className="modal-login-button">로그인</button>
         </form>
 
