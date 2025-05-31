@@ -6,6 +6,7 @@ const MapView = ({ city, mapType }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]); // 기존 마커 추적
+  const mapId = import.meta.env.VITE_GOOGLE_MAP_ID;
 
   useEffect(() => {
     if (!window.google || !window.google.maps) return;
@@ -13,7 +14,7 @@ const MapView = ({ city, mapType }) => {
     const instance = new window.google.maps.Map(mapRef.current, {
       center: { lat: 37.5665, lng: 126.9780 },
       zoom: 12,
-      mapId: '2f078c6c6b250f4cad01c570',
+      mapId: mapId,
     });
 
     setMap(instance);
