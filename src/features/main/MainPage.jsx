@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import LoginModal from '../auth/LoginModal';
 import MapView from '../../components/MapView';
 import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
+import Header from '../../components/Header';
 
 import '../../styles/MainPage.css';
 
+const LOGIN_STATE = true;
+
 const MainPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn] = useState(LOGIN_STATE);
   const [showLogin, setShowLogin] = useState(false);
   const [mapType, setMapType] = useState(null);       // 'noise' | 'fraud'
   const [showMap, setShowMap] = useState(false);       // 버튼 위치 기준 상태
@@ -18,12 +21,16 @@ const MainPage = () => {
     setShowMap(true); // 버튼 누른 이후 위로 이동하게 설정
   };
 
+    useEffect(() => {
+    if (!isLoggedIn) {
+      setShowLogin(true); // 로그인 안된 상태면 모달 자동 표시
+    }
+  }, [isLoggedIn]);
+
   return (
     <div className="main-container">
-      <header className="main-header">
-        <h1 className="logo">Jeonse-ive</h1>
-        <a className="mypage-link" href="/mypage">마이페이지</a>
-      </header>
+    <Header />
+
 
       <main className="main-content" style={{ justifyContent: showMap ? 'flex-start' : 'center' }}>
         {isLoggedIn ? (
