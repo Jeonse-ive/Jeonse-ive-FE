@@ -6,7 +6,7 @@ import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
 
 import '../../styles/MainPage.css';
 
-const LOGIN_STATE = false;
+const LOGIN_STATE = true;
 
 const MainPage = () => {
   const [isLoggedIn] = useState(LOGIN_STATE);
