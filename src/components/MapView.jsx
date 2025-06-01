@@ -63,7 +63,7 @@ const MapView = ({ city, mapType }) => {
             });
 
             const infoWindow = new window.google.maps.InfoWindow();
-            marker.addEventListener('gmp-click', () => {
+            marker.addEventListener('click', () => {
               const content = `
                 <strong>${stationName}</strong><br/>
                 소음: ${recentValue} dB<br/>
