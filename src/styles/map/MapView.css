@@ -1,0 +1,19 @@
+.custom-marker {
+  background-color: #8c92d3;
+  color: white;
+  font-size: 0.75rem;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+  background-color: #7076c2;
+  cursor: pointer;
+}
+
+
