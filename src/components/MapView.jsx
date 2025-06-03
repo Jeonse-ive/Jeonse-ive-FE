@@ -83,9 +83,10 @@ const MapView = ({ city, mapType }) => {
           console.error('소음 데이터 요청 실패:', err);
         }
       } else if (mapType === 'fraud') {
-        clearMarkers(); // fraud일 경우도 마커 제거
-        console.log('전세사기 지도 로딩 준비 중...');
-      }
+          clearMarkers(); // 기존 마커 제거
+          setMarkers([]); // 상태도 초기화 ← 이거 추가
+          console.log('전세사기 지도 로딩 준비 중...');
+        }
     };
 
     fetchAndRender();
