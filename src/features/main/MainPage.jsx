@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import LoginModal from '../auth/LoginModal';
-import MapView from '../../components/MapView';
+import MapView from '../../components/map/MapView';
 import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
 import Header from '../../components/Header';
 import axios from '../../api/axiosInstance';
