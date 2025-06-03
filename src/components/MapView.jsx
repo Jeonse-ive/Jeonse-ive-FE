@@ -37,16 +37,7 @@ const MapView = ({ city, mapType }) => {
         try {
           const res = await axios.get('/api/stations');
 
-          console.log("✅ 전체 응답 객체:", res);
-          console.log("✅ res.status:", res.status);
-          console.log("✅ res.headers:", res.headers);
-          console.log("✅ res.data:", res.data);
-
-
           const stations = Array.isArray(res.data.data) ? res.data.data : [];
-
-          console.log("✅ stations 배열 길이:", stations.length);
-          console.log("✅ 예시 station:", stations[0]);
 
           const filteredStations = city === '전체'
             ? stations
