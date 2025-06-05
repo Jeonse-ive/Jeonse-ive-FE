@@ -7,6 +7,7 @@ import useGoogleMapsLoader from '../../hooks/useGoogleMapsLoader';
 import Header from '../../components/Header';
 import axios from '../../api/axiosInstance';
 
+
 import '../../styles/MainPage.css';
 
 const MainPage = () => {

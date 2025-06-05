@@ -23,8 +23,8 @@ const SignUpPage = () => {
     setError('');
     setLoading(true);
 
-    if (form.password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+    if (form.password.length < 8) {
+      setError('비밀번호는 최소 8자 이상이어야 합니다.');
       setLoading(false);
       return;
     }
@@ -67,11 +67,11 @@ const SignUpPage = () => {
         <input
           type="password"
           name="password"
-          placeholder="비밀번호 (6자 이상)"
+          placeholder="비밀번호 (8자 이상)"
           value={form.password}
           onChange={handleChange}
           required
-          minLength={6}
+          minLength={8}
         />
         {error && <p className="error-message">{error}</p>}
         <button type="submit" disabled={loading}>
