@@ -1,15 +1,27 @@
-// src/features/mypage/EditUserModal.jsx
 import React, { useState } from 'react';
+import axios from '../../api/axiosInstance';
 import '../../styles/mypage/EditUserModal.css';
 
 const EditUserModal = ({ userInfo, onClose, onSubmit }) => {
-  const [email, setEmail] = useState(userInfo.email);
   const [nickname, setNickname] = useState(userInfo.nickname);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ email, nickname });
-    onClose();
+
+    try {
+      const res = await axios.put('/api/members/memberInfo', {
+        email: userInfo.email,
+        nickname,
+        password: '' // 비밀번호 변경은 없으므로 공백 또는 null 처리
+      });
+
+      alert('회원정보가 수정되었습니다.');
+      onSubmit(res.data.data); // 수정된 데이터로 상태 갱신
+      onClose();
+    } catch (err) {
+      console.error('회원정보 수정 실패:', err);
+      alert('회원정보 수정에 실패했습니다.');
+    }
   };
 
   return (
@@ -18,7 +30,7 @@ const EditUserModal = ({ userInfo, onClose, onSubmit }) => {
         <h3>회원정보 수정</h3>
         <form onSubmit={handleSubmit}>
           <label>이메일</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input value={userInfo.email} readOnly disabled />
 
           <label>닉네임</label>
           <input value={nickname} onChange={(e) => setNickname(e.target.value)} required />
