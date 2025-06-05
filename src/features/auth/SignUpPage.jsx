@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/auth/SignUpPage.css';
+import axios from '../../api/axiosInstance';
 
 const SignUpPage = () => {
   const [form, setForm] = useState({
@@ -7,16 +9,39 @@ const SignUpPage = () => {
     nickname: '',
     password: '',
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: API 연결 예정
-    alert('회원가입 요청: ' + JSON.stringify(form));
+    setError('');
+    setLoading(true);
+
+    if (form.password.length < 6) {
+      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await axios.post('/api/members/signup', {
+        ...form,
+        role: 'USER', // 필수
+      });
+      alert('회원가입이 완료되었습니다!');
+      navigate('/', { state: { showLogin: true } }); // 메인으로 이동 + 로그인 모달 자동 표시
+    } catch (err) {
+      const message = err.response?.data?.message || '서버 오류가 발생했습니다.';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,12 +67,16 @@ const SignUpPage = () => {
         <input
           type="password"
           name="password"
-          placeholder="비밀번호"
+          placeholder="비밀번호 (6자 이상)"
           value={form.password}
           onChange={handleChange}
           required
+          minLength={6}
         />
-        <button type="submit">가입하기</button>
+        {error && <p className="error-message">{error}</p>}
+        <button type="submit" disabled={loading}>
+          {loading ? '가입 중...' : '가입하기'}
+        </button>
       </form>
     </div>
   );

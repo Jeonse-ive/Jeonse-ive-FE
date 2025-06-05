@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import LoginModal from '../auth/LoginModal';
 import MapView from '../../components/map/MapView';
@@ -8,23 +9,26 @@ import axios from '../../api/axiosInstance';
 
 import '../../styles/MainPage.css';
 
-const LOGIN_STATE = true;
-
 const MainPage = () => {
-  const [isLoggedIn] = useState(LOGIN_STATE);
+  const location = useLocation();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false); // ✅ 로그인 검사 완료 여부
   const [showLogin, setShowLogin] = useState(false);
-  const [mapType, setMapType] = useState(null);       // 'noise' | 'fraud'
-  const [showMap, setShowMap] = useState(false);       // 버튼 위치 기준 상태
-  const loaded = useGoogleMapsLoader();
+
+  const [mapType, setMapType] = useState(null);
+  const [showMap, setShowMap] = useState(false);
   const [selectedCity, setSelectedCity] = useState('전체');
   const [cityList, setCityList] = useState([]);
 
+  const loaded = useGoogleMapsLoader();
+
   const handleClick = (type) => {
     setMapType(type);
-    setShowMap(true); // 버튼 누른 이후 위로 이동하게 설정
+    setShowMap(true);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchCities = async () => {
       try {
         const res = await axios.get('/api/stations');
@@ -39,23 +43,30 @@ const MainPage = () => {
     fetchCities();
   }, []);
 
-    useEffect(() => {
-    if (!isLoggedIn) {
-      setShowLogin(true); // 로그인 안된 상태면 모달 자동 표시
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const loggedIn = !!token;
+    setIsLoggedIn(loggedIn);
+
+    if (location.state?.showLogin || !loggedIn) {
+      setShowLogin(true);
     }
-  }, [isLoggedIn]);
+
+    setAuthChecked(true); // ✅ 검사 완료 표시
+  }, [location]);
 
   return (
     <div className="main-container">
-    <Header />
-
+      <Header />
 
       <main className="main-content" style={{ justifyContent: showMap ? 'flex-start' : 'center' }}>
-        {isLoggedIn ? (
+        {!authChecked ? (
+          <p>로딩 중...</p> // 최초 진입 시 깜빡임 방지
+        ) : isLoggedIn ? (
           <div className="content-wrapper">
             <div className={`button-group ${showMap ? 'map-shown' : ''}`}>
-            <button className="map-button" onClick={() => handleClick('noise')}>소음지도 보기</button>
-            <button className="map-button" onClick={() => handleClick('fraud')}>전세사기 지도 보기</button>
+              <button className="map-button" onClick={() => handleClick('noise')}>소음지도 보기</button>
+              <button className="map-button" onClick={() => handleClick('fraud')}>전세사기 지도 보기</button>
             </div>
 
             <div className={`map-wrapper ${showMap ? 'visible' : ''}`}>
@@ -70,7 +81,6 @@ const MainPage = () => {
                   ))}
                 </select>
               )}
-
               {loaded && <MapView city={selectedCity} mapType={mapType} />}
             </div>
           </div>
