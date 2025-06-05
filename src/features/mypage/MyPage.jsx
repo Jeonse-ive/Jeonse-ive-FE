@@ -22,20 +22,41 @@ const MyPage = () => {
     fetchMyInfo();
   }, []);
 
-  const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    await axiosInstance.post('/api/auth/logout');
+
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     alert('로그아웃 되었습니다.');
     window.location.href = '/';
-  };
+  } catch (err) {
+    console.error('로그아웃 실패:', err);
+    alert('로그아웃 처리 중 오류가 발생했습니다.');
+  }
+};
 
-  const handleDelete = () => {
-    const confirmed = window.confirm('정말로 회원 탈퇴하시겠습니까?');
-    if (confirmed) {
-      // TODO: 탈퇴 API 호출 필요
-      alert('회원 탈퇴 처리되었습니다.');
-    }
-  };
+const handleDelete = async () => {
+  const confirmed = window.confirm('정말로 회원 탈퇴하시겠습니까?');
+  if (!confirmed) return;
+
+  const password = prompt('비밀번호를 입력하세요:');
+  if (!password) return;
+
+  try {
+    await axiosInstance.delete('/api/members/', {
+      params: { password }  // ✅ params 대신 data로 전달
+    });
+
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    alert('회원 탈퇴 처리되었습니다.');
+    window.location.href = '/';
+  } catch (err) {
+    console.error('회원 탈퇴 실패:', err);
+    alert('회원 탈퇴에 실패했습니다.');
+  }
+};
 
   const handleEdit = () => {
     setShowEditModal(true);
