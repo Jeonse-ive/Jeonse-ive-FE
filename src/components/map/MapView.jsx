@@ -1,5 +1,5 @@
 import NoiseMap from './NoiseMap';
-// import FraudMap from './FraudMap';
+import FraudMap from './FraudMap';
 
 const MapView = ({ city, mapType }) => {
   return (
@@ -13,7 +13,7 @@ const MapView = ({ city, mapType }) => {
       }}
     >
       {mapType === 'noise' && <NoiseMap city={city} />}
-      {/* {mapType === 'fraud' && <FraudMap city={city} />} */}
+      {mapType === 'fraud' && <FraudMap city={city} />}
     </div>
   );
 };
