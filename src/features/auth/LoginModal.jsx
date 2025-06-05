@@ -18,10 +18,12 @@ const LoginModal = ({ onClose }) => {
     try {
       const res = await axios.post('/api/login', form);
 
-      const { accessToken } = res.data.data;
+      const { accessToken, refreshToken } = res.data.data;
       if (!accessToken) throw new Error('accessToken이 응답에 없습니다.');
 
       localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken)
+      alert('로그인 성공!');
       onClose(); // 모달 닫기
       window.location.reload(); // MainPage 리렌더링을 위한 새로고침
     } catch (err) {
